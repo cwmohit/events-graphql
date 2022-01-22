@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../context/authContext";
 
 function MainNav() {
+  const user = useContext(AuthContext);
+
   return (
     <div>
       <header className="p-3 bg-dark text-white">
@@ -31,19 +34,27 @@ function MainNav() {
                   Events
                 </NavLink>
               </li>
-              <li>
-                <NavLink to="/bookings" className="nav-link px-2 text-white">
-                  Bookings
-                </NavLink>
-              </li>
+              {
+                user?.token &&
+                <li>
+                  <NavLink to="/bookings" className="nav-link px-2 text-white">
+                    Bookings
+                  </NavLink>
+                </li>
+              }
             </ul>
 
             <div className="text-end">
-              <NavLink to="/auth">
-                <button type="button" className="btn btn-outline-light me-2">
-                  Login
-                </button>
-              </NavLink>
+              {
+                !user?.token ? 
+                <NavLink to="/auth">
+                  <button type="button" className="btn btn-outline-light me-2">
+                    Login
+                  </button>
+                </NavLink> :  <button type="button" className="btn btn-outline-light me-2" onClick={() => user.logout()}>
+                    Logout
+                  </button>
+              }
             </div>
           </div>
         </div>

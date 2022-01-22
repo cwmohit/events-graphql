@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/authContext";
 
 function Auth() {
+  const user = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState(true);
   const onSubmitAuth = async (e) => {
     e.preventDefault();
@@ -42,6 +44,9 @@ function Auth() {
       });
       const result = await response.json();
       console.log(result.data);
+      if(result?.data?.login?.token){
+        user.login(result?.data?.login?.token, result?.data?.login?.userId, result?.data?.login?.tokenExpiration)
+      }
     } catch (error) {
       console.log(error);
     }
